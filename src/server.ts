@@ -26,15 +26,21 @@ connectDB()
 const server = express()
 
 // Permitir conexiones
-const corsOptions : CorsOptions = {
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    "https://rest-apis-typescript-frontend-7c4xis6k6.vercel.app"
+];
+
+const corsOptions: CorsOptions = {
     origin: function(origin, callback) {
-        if(origin === process.env.FRONTEND_URL) {
-            callback(null, true)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
         } else {
-            callback(new Error("Error de CORS"))
+            callback(new Error("Error de CORS"));
         }
     }
-}
+};
+
 server.use(cors(corsOptions))
 
 // Leer datos de formularios
